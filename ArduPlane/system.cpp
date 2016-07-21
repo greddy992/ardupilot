@@ -469,6 +469,9 @@ void Plane::set_mode(enum FlightMode mode)
             auto_state.vtol_mode = true;
         }
         break;
+    case SOAR:
+    	auto_throttle_mode = false;
+    	break;
     }
 
     // start with throttle suppressed in auto_throttle modes
@@ -508,6 +511,7 @@ bool Plane::mavlink_set_mode(uint8_t mode)
     case QLOITER:
     case QLAND:
     case QRTL:
+    case SOAR:
         set_mode((enum FlightMode)mode);
         return true;
     }
@@ -715,6 +719,9 @@ void Plane::print_flight_mode(AP_HAL::BetterStream *port, uint8_t mode)
     case QRTL:
         port->print("QRTL");
         break;
+    case SOAR:
+            port->print("Soar");
+            break;
     default:
         port->printf("Mode(%u)", (unsigned)mode);
         break;

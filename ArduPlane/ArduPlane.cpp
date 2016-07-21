@@ -752,7 +752,15 @@ void Plane::update_flight_mode(void)
     case INITIALISING:
         // handled elsewhere
         break;
-    }
+
+    case SOAR:
+    	//copied FBWB's initialization at the moment. Need to change this.
+    	nav_roll_cd = channel_roll->norm_input() * roll_limit_cd;
+		nav_roll_cd = constrain_int32(nav_roll_cd, -roll_limit_cd, roll_limit_cd);
+		update_load_factor();
+		update_fbwb_speed_height();
+		break;
+	}
 }
 
 void Plane::update_navigation()

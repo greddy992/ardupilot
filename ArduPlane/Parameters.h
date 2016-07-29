@@ -54,7 +54,7 @@ public:
         // Misc
         //
         k_param_auto_trim      = 10,
-        k_param_log_bitmask_old,  // unused
+        k_param_soar_enable,  // changed from log_bitmask_old to soar_enable
         k_param_pitch_trim_cd,
         k_param_mix_mode,
         k_param_reverse_elevons,
@@ -458,6 +458,7 @@ public:
     // Misc
     //
     AP_Int8 auto_trim;
+    AP_Int8 soar_enable;
     AP_Int8 mix_mode;
     AP_Int8 vtail_output;
     AP_Int8 elevon_output;

@@ -547,6 +547,21 @@ private:
         uint32_t impact_timer_ms;
     } crash_state;
 
+    struct {
+
+    	//uint16_t numstates_soar = 9;
+    	float smoothed_windacceleration = 0;
+    	float smoothed_airacceleration = 0;
+    	float effective_torque = 0;
+    	uint16_t last_update_timer = 0;
+    	float delay_timer_ms = 0;
+    	float prevwindvel = 0;
+    	float prevairvel = 0;
+    	float prevnavroll = 0;
+
+    } soar_state ;
+    //introduce a set of parameters for soaring here:
+
     // true if we are in an auto-throttle mode, which means
     // we need to run the speed/height controller
     bool auto_throttle_mode;
@@ -772,6 +787,7 @@ private:
     void demo_servos(uint8_t i);
     void adjust_nav_pitch_throttle(void);
     void update_load_factor(void);
+    void update_soar(void);
     void send_heartbeat(mavlink_channel_t chan);
     void send_attitude(mavlink_channel_t chan);
     void send_fence_status(mavlink_channel_t chan);
@@ -815,6 +831,7 @@ private:
     void Log_Write_RC(void);
     void Log_Write_Baro(void);
     void Log_Write_Airspeed(void);
+    void Log_Write_Soar(void);
     void Log_Write_Home_And_Origin();
     void Log_Write_Vehicle_Startup_Messages();
     void Log_Read(uint16_t log_num, int16_t start_page, int16_t end_page);

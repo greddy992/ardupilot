@@ -417,3 +417,8 @@
 #ifndef PARACHUTE
 #define PARACHUTE ENABLED
 #endif
+
+///Soar begin
+#ifndef SOAR_ENABLE
+#define SOAR_ENABLE 0
+#endif

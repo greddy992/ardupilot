@@ -580,6 +580,14 @@ struct PACKED log_AIRSPEED {
     bool    use;
 };
 
+struct PACKED log_SOAR {
+    LOG_PACKET_HEADER;
+    uint64_t time_us;
+    float   smoothed_windacceleration;
+    float	smoothed_airacceleration;
+    float   effective_torque;
+};
+
 struct PACKED log_ACCEL {
     LOG_PACKET_HEADER;
     uint64_t time_us;
@@ -749,6 +757,8 @@ Format characters in the format string for binary log messages
       "TRIG", "QIHLLeeeccC","TimeUS,GPSTime,GPSWeek,Lat,Lng,Alt,RelAlt,GPSAlt,Roll,Pitch,Yaw" }, \
     { LOG_ARSP_MSG, sizeof(log_AIRSPEED), \
       "ARSP",  "QffcffB",  "TimeUS,Airspeed,DiffPress,Temp,RawPress,Offset,U" }, \
+    { LOG_SOAR_MSG, sizeof(log_SOAR), \
+	  "SOAR",  "Qfff",  "TimeUS,SmthWindAcc,SmthAirAcc,EffTor" }, \
     { LOG_CURRENT_MSG, sizeof(log_Current), \
       "CURR", "Qfff","TimeUS,Volt,Curr,CurrTot" },\
     { LOG_CURRENT2_MSG, sizeof(log_Current), \
@@ -944,6 +954,7 @@ enum LogMessages {
     LOG_EKF5_MSG,
     LOG_BAR2_MSG,
     LOG_ARSP_MSG,
+    LOG_SOAR_MSG,
     LOG_ATTITUDE_MSG,
     LOG_CURRENT_MSG,
     LOG_CURRENT2_MSG,

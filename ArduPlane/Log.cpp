@@ -456,6 +456,11 @@ void Plane::Log_Write_Airspeed(void)
     DataFlash.Log_Write_Airspeed(airspeed);
 }
 
+//Write a Soar packet
+void Plane::Log_Write_Soar(void)
+{
+    DataFlash.Log_Write_Soar(soar_state.smoothed_windacceleration,soar_state.smoothed_airacceleration, soar_state.effective_torque);
+}
 // log ahrs home and EKF origin to dataflash
 void Plane::Log_Write_Home_And_Origin()
 {

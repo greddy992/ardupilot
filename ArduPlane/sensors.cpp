@@ -110,6 +110,7 @@ void Plane::read_airspeed(void)
     }
 }
 
+
 void Plane::zero_airspeed(bool in_startup)
 {
     airspeed.calibrate(in_startup);

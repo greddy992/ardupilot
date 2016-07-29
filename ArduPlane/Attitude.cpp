@@ -1381,3 +1381,44 @@ void Plane::update_load_factor(void)
         roll_limit_cd = constrain_int32(roll_limit_cd, -roll_limit, roll_limit);
     }    
 }
+
+
+void Plane::update_soar()
+{
+	Vector3f currwind = ahrs.wind_estimate();
+	float tau = 100.0f;
+	float tor_tscale = 500.0f;
+	float acc_tscale = 500.0f;
+	float sink_rate = 0.0f;
+	float timediff_ms = (micros() - soar_state.last_update_timer)/1000.0f;
+	if( soar_state.last_update_timer > 0 && timediff_ms < 500.0f )
+	{
+		soar_state.delay_timer_ms += timediff_ms;
+		if(soar_state.delay_timer_ms > tau)
+		{
+			soar_state.effective_torque = soar_state.effective_torque*expf(-soar_state.delay_timer_ms/tor_tscale) + tor_tscale*(ahrs.roll_sensor - soar_state.prevnavroll)/soar_state.delay_timer_ms ;
+			soar_state.prevnavroll = nav_roll_cd;
+			soar_state.delay_timer_ms = 0;
+		}
+		soar_state.smoothed_windacceleration = soar_state.smoothed_windacceleration*expf(-timediff_ms/acc_tscale) + (currwind.z - soar_state.prevwindvel)/(0.001f*timediff_ms);
+
+		Vector3f vel;
+		if (ahrs.get_velocity_NED(vel)) {
+			sink_rate = vel.z;
+		} else if (gps.status() >= AP_GPS::GPS_OK_FIX_3D && gps.have_vertical_velocity()) {
+			sink_rate = gps.velocity().z;
+		} else {
+			sink_rate = -barometer.get_climb_rate();
+		}
+		soar_state.smoothed_airacceleration = soar_state.smoothed_airacceleration*expf(-timediff_ms/acc_tscale) + (sink_rate - soar_state.prevairvel)/(0.001f*timediff_ms);
+	}
+	else
+	{
+		soar_state.smoothed_windacceleration = 0;
+		soar_state.smoothed_airacceleration = 0;
+		soar_state.effective_torque = 0;
+	}
+	soar_state.prevwindvel = currwind.z;
+	soar_state.prevairvel  = sink_rate;
+	soar_state.last_update_timer = micros();
+}

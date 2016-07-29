@@ -262,6 +262,8 @@ void Plane::update_logging1(void)
 
     if (should_log(MASK_LOG_ATTITUDE_MED) && !should_log(MASK_LOG_IMU))
         Log_Write_IMU();
+    if(g.soar_enable == 1)
+    	Log_Write_Soar();
 }
 
 /*
@@ -640,6 +642,7 @@ void Plane::update_flight_mode(void)
 
     case AUTOTUNE:
     case FLY_BY_WIRE_A: {
+
         // set nav_roll and nav_pitch using sticks
         nav_roll_cd  = channel_roll->norm_input() * roll_limit_cd;
         nav_roll_cd = constrain_int32(nav_roll_cd, -roll_limit_cd, roll_limit_cd);
@@ -671,6 +674,11 @@ void Plane::update_flight_mode(void)
                 }
             }
         }
+        if(g.soar_enable==1)
+		{
+			update_soar();
+
+		}
         break;
     }
 
@@ -753,13 +761,6 @@ void Plane::update_flight_mode(void)
         // handled elsewhere
         break;
 
-    case SOAR:
-    	//copied FBWB's initialization at the moment. Need to change this.
-    	nav_roll_cd = channel_roll->norm_input() * roll_limit_cd;
-		nav_roll_cd = constrain_int32(nav_roll_cd, -roll_limit_cd, roll_limit_cd);
-		update_load_factor();
-		update_fbwb_speed_height();
-		break;
 	}
 }
 

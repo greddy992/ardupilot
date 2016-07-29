@@ -1810,6 +1810,19 @@ void DataFlash_Class::Log_Write_Airspeed(AP_Airspeed &airspeed)
     WriteBlock(&pkt, sizeof(pkt));
 }
 
+// Write a SOAR packet
+void DataFlash_Class::Log_Write_Soar(float smooth_wa, float smooth_aa, float eff_tor)
+{
+    struct log_SOAR pkt = {
+        LOG_PACKET_HEADER_INIT(LOG_SOAR_MSG),
+        time_us       : AP_HAL::micros64(),
+        smoothed_windacceleration	: smooth_wa,
+        smoothed_airacceleration	: smooth_aa,
+        effective_torque			: eff_tor
+    };
+    WriteBlock(&pkt, sizeof(pkt));
+}
+
 // Write a Yaw PID packet
 void DataFlash_Class::Log_Write_PID(uint8_t msg_type, const PID_Info &info)
 {

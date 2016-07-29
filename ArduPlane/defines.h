@@ -66,8 +66,7 @@ enum FlightMode {
     QHOVER        = 18,
     QLOITER       = 19,
     QLAND         = 20,
-    QRTL          = 21,
-    SOAR		  = 22
+    QRTL          = 21
 };
 
 // type of stick mixing enabled
